@@ -17,6 +17,9 @@
 #include <GL/glut.h>
 #include <GL/gl.h>
 #include <math.h>
+#include <algorithm>
+#include <utility> 
+#include<iostream>
 
 using namespace std;
 using namespace cv;
@@ -29,10 +32,12 @@ public:
 	Lumigraph(String);
 
 	~Lumigraph(void);
-	int u_count;
-	int v_count;
+	int uv_count;
 	int t_width;
 	int s_height;
 	unsigned char*ImgDataSeq;
+	
+	vector <Matx34d> AllCameraMat;
+	vector<pair<int,double>> GetWeights(Point3d proxyPoint, Point3d VirtualCameraLoc, vector<Point3d> AllCameraLocs);
 };
 
