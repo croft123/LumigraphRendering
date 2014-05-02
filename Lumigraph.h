@@ -9,9 +9,6 @@
 #include "opencv2/nonfree/features2d.hpp"
 #include <opencv2/core/core.hpp>
 
-
-
-
 #include <stdlib.h>
 //#include <windows.h>
 #include <GL/glut.h>
@@ -20,6 +17,8 @@
 #include <algorithm>
 #include <utility> 
 #include<iostream>
+#include "XForm.h"
+
 
 using namespace std;
 using namespace cv;
@@ -36,8 +35,16 @@ public:
 	int t_width;
 	int s_height;
 	unsigned char*ImgDataSeq;
+	vector<pair<int,double>> CurrFrameWeights;
+	vector<Point3d> proxyData;
 	
-	vector <Matx34d> AllCameraMat;
-	vector<pair<int,double>> GetWeights(Point3d proxyPoint, Point3d VirtualCameraLoc, vector<Point3d> AllCameraLocs);
+	vector <Matx34d> AllCameraMat; // All projection Matrices
+	vector<pair<int,double>> GetWeights(Point3d proxyPoint, Point3d VirtualCameraLoc, vector<Point3d> AllCameraLocsP);
+	vector<Matx33d> CalculateFundamentalMat(vector<Matx34d> allcameraMat, Matx34d curP);
+	int kth;
+	Mat RenderImage(vector<Point3d> proxyPoint, Point3d VirtualCameraLoc, vector<Point3d> AllCameraLocs,Matx34d VirtualP);
+	Mat DrawImage(xform xf);
+	Mat InterpolateRenderImage(Mat Img, vector<Vec2d> proxy2DPoint);
+	int proxyWidth;
 };
 

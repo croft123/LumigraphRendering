@@ -211,18 +211,18 @@ template <class T>
 static inline XForm<T> rot_only(const XForm<T> &xf)
 {
 	return XForm<T>(xf[0], xf[1], xf[2], 0,
-			xf[4], xf[5], xf[6], 0,
-			xf[8], xf[9], xf[10], 0,
-			0, 0, 0, 1);
+					xf[4], xf[5], xf[6], 0,
+					xf[8], xf[9], xf[10], 0,
+					0, 0, 0, 1);
 }
 
 template <class T>
 static inline XForm<T> trans_only(const XForm<T> &xf)
 {
 	return XForm<T>(1, 0, 0, 0,
-			0, 1, 0, 0,
-			0, 0, 1, 0,
-			xf[12], xf[13], xf[14], 1);
+					0, 1, 0, 0,
+					0, 0, 1, 0,
+					xf[12], xf[13], xf[14], 1);
 }
 
 template <class T>
