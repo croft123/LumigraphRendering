@@ -18,6 +18,7 @@
 #include <utility> 
 #include<iostream>
 #include "XForm.h"
+#include "ReadInDataSet.h"
 
 
 using namespace std;
@@ -46,5 +47,6 @@ public:
 	Mat DrawImage(xform xf);
 	Mat InterpolateRenderImage(Mat Img, vector<Vec2d> proxy2DPoint);
 	int proxyWidth;
+	int proxyHeight;
 };
 

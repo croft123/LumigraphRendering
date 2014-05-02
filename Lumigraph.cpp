@@ -1,5 +1,6 @@
 #include "Lumigraph.h"
 
+
 bool paircomp (pair<int,double> p, pair<int,double> q) { return (p.second < q.second); }
 
 Lumigraph::Lumigraph(void)
@@ -21,6 +22,8 @@ Lumigraph::Lumigraph(string filename)
 {
 	string param = filename + "_parameters.txt";
 	string data = filename + "_data";
+	string proxy = filename + "_proxy.txt";
+	string cameraMat = filename + "_camera.xml";
 
 	// First read in parameters
 
@@ -33,9 +36,47 @@ Lumigraph::Lumigraph(string filename)
 
 	// Read in parameters
 	int t_width, s_height, uv_count;
+	fscanf(lfparamfile, "%d %d %d", &t_width, &s_height, &uv_count);
+
+
+	fclose(lfparamfile);
 
 	//Read in Image data
 	this->ImgDataSeq = (unsigned char*) malloc(sizeof(unsigned char) * t_width * s_height * uv_count *3);
+	// Then grab the data
+	FILE *lfdatafile = fopen(data.c_str(), "rb");
+	if (lfdatafile == NULL) {
+		printf("Could not open file %s", data.c_str()); 
+		return;
+	}
+	fread( this->ImgDataSeq, t_width * s_height * uv_count *3, 1, lfdatafile );
+	fclose(lfdatafile);
+
+	string FullPathXML = filename + ".xml";
+	//FileStorage fs(FullPathXML,FileStorage::READ);
+	vector<string> imagelists;
+	if(!readStringList(FullPathXML, imagelists))
+	{
+		cout << "Can't locate the file!" << endl;
+		
+	}
+
+	FileStorage fs(cameraMat, FileStorage::READ);   //Read in Camera Matrix for each image
+	for(int i = 0; i < imagelists.size(); i++)
+	{
+		fs[imagelists[i]] >> Mat(AllCameraMat[i]);
+	}
+	
+	//Read in Proxy
+	FILE *lfproxyfile = fopen(proxy.c_str(), "rb");
+	for(int i = 0;i<proxyWidth*proxyHeight;i += 3)
+	{
+		fscanf(lfproxyfile, "%d %d %d", &proxyData[i].x, &proxyData[i].y, &proxyData[i].z);
+	}
+	
+	fclose(lfproxyfile);
+	
+
 }
 
 

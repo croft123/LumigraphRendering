@@ -141,6 +141,9 @@ int main( int argc, char** argv )
 	glutMouseFunc(mousebuttonfunc);
 	glutMotionFunc(mousemotionfunc);
 	resetview();
+
+	string filename = filepath + data;
+	init(filename.c_str());
 	glutMainLoop();
 
 }

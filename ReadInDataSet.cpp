@@ -25,7 +25,8 @@ using namespace std;
 using namespace cv;
 
 
-static bool readStringList(const string& filename, vector<string>& l){
+ bool readStringList(const string& filename, vector<string>& l)
+{
   l.clear();
   FileStorage fs(filename, FileStorage::READ);
   if( !fs.isOpened() )
