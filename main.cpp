@@ -6,6 +6,7 @@
 #include <opencv2/calib3d/calib3d.hpp>
 #include "opencv2/nonfree/features2d.hpp"
 #include <opencv2/core/core.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
 #include <stdlib.h>
 #include <GL/glew.h>
 #include <GL/glut.h>
@@ -51,10 +52,14 @@ void redraw()
 
 	glMatrixMode(GL_PROJECTION);
 	glMultMatrixd(xf);
-	Mat Img = lg[0].DrawImage(xf);
-	for(int s = 0;s<lg[0].s_height;s++)
+	Mat Img_ori = lg[0].DrawImage(xf);
+	Mat Img;
+	Size size(WIDTH,HEIGHT);
+	resize(Img_ori,Img,size);
+
+	for(int s = 0;s<HEIGHT;s++)
 	{
-		for(int t=0;t<lg[0].t_width;t++)
+		for(int t=0;t<WIDTH;t++)
 		{
 			pixels[index] = *(Img.data + Img.step[0]*s + Img.step[1]*t);
 			pixels[index+1] = *(Img.data + Img.step[0]*s + Img.step[1]*t + 1);
@@ -63,7 +68,7 @@ void redraw()
 		}
 	}
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glDrawPixels(WIDTH,HEIGHT,GL_RGB,GL_FLOAT,pixels);
+	glDrawPixels(WIDTH,HEIGHT,GL_RGB,GL_UNSIGNED_BYTE,pixels);
 	glutSwapBuffers();
 	glPopMatrix();
 }
@@ -119,17 +124,20 @@ void resetview()
 int main( int argc, char** argv )
 {
 
-	string filepath = "C:\\HomeWork&Project\\CS684\\DataBase\\preview\\";
-	string data = "jelly_beans";
+	//string filepath = "C:\\HomeWork&Project\\CS684\\DataBase\\preview\\";
+	try
+	{
+	string filepath = "C:\\OpenCV_Project\\SFM_Exp\\Test\\";
+	string data = "Building";
 	int WriteTXT = 0;
 	if(WriteTXT == 1)
 	{
-		string dataTXT = "C:\\" + data + ".txt";
+		string dataTXT = filepath + data + ".txt";
 		ofstream fout( dataTXT, ios::app);
 		dfsFolder(filepath, fout);
 	}
 	ReadInImages(filepath,data);
-
+	
 	glutInitWindowPosition(100, 0);
 	glutInitWindowSize(WIDTH,HEIGHT);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
@@ -145,5 +153,10 @@ int main( int argc, char** argv )
 	string filename = filepath + data;
 	init(filename.c_str());
 	glutMainLoop();
+	}
+	catch(cv::Exception & e)
+	{
+		cout<<e.msg<<endl;
+	}
 
 }

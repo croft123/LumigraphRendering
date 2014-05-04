@@ -8,6 +8,7 @@
 #include <opencv2/calib3d/calib3d.hpp>
 #include "opencv2/nonfree/features2d.hpp"
 #include <opencv2/core/core.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
 
 #include <stdlib.h>
 //#include <windows.h>
@@ -39,11 +40,13 @@ public:
 	vector<pair<int,double>> CurrFrameWeights;
 	vector<Point3d> proxyData;
 	
-	vector <Matx34d> AllCameraMat; // All projection Matrices
+	vector <Matx34d> AllCameraMat; 
+	Mat Camera_K; // Camera Intrinsic Matrxi
+	Mat discoeff;
 	vector<pair<int,double>> GetWeights(Point3d proxyPoint, Point3d VirtualCameraLoc, vector<Point3d> AllCameraLocsP);
 	vector<Matx33d> CalculateFundamentalMat(vector<Matx34d> allcameraMat, Matx34d curP);
 	int kth;
-	Mat RenderImage(vector<Point3d> proxyPoint, Point3d VirtualCameraLoc, vector<Point3d> AllCameraLocs,Matx34d VirtualP);
+	Mat RenderImage(vector<Point3d> proxyPoint, Point3d VirtualCameraLoc, vector<Point3d> AllCameraLocs,Matx33d VirtualRot,Vec3d VirtualTrans);
 	Mat DrawImage(xform xf);
 	Mat InterpolateRenderImage(Mat Img, vector<Vec2d> proxy2DPoint);
 	int proxyWidth;
